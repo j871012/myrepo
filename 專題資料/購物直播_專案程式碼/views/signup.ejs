@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>CYUT_註冊</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="https://store.ims.ice.cyut.edu.tw/javascript/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://store.ims.ice.cyut.edu.tw/css/bootstrap.min.css">
+    <link rel="icon" href="https://www.convertico.com/images/1606070688.4403/_previmg.png" type="image/x-icon" / >
+    <style>
+      #home h1 button{
+        font-size: 50px;
+        font-weight: bold;
+      }
+      #home h1 button:hover{
+        background-color: #9c9592;  /*游標指向時顏色*/
+      }
+      H2 {
+        font-size: 25px;
+        font-weight: bold;
+        text-align :center;  
+      }
+      H3{
+        height:20px;
+      }
+      h4{
+        height: 200px;
+      }
+      body {
+            background-image:url('https://lh3.googleusercontent.com/-T-RKQeLK-T4/X7wUBTE8afI/AAAAAAAADf0/LFyOjhGX7JE-9x2-CML-b54CsK8OvfGogCLcBGAsYHQ/%25E5%259C%2596%25E7%2589%25871.png');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            background-size: 45%;              
+      }
+      </style>
+  </head>
+  
+<body>
+  <h4></h4>
+  <div id="home" align=center>
+    <h1><button type="button" class="btn btn-default"onclick="location.href='/'">直播平台</button></h1>
+  </div>
+  <% if(errors){ %>
+    <% errors.forEach(function(error){ %>
+    <div class="error"><%= error.msg %></div>
+    <% }) %>
+  <% } %>
+  <h3> </h3>
+  <form method="post" action="/users/signup">
+    <div class="card border-dark mx-auto" style="max-width: 21rem;">
+      <div class="card-header bg-transparent border-dark">
+      <h2>註冊</h2>
+    </div>
+      <div class="card-title" align="center">
+        <label>Username:</label>
+        <input type="text" class="form-control" name="username" placeholder="Username">
+      </div>
+      <div class="card-title" align="center">
+        <label>Password :</label>
+        <input type="password" class="form-control" name="password" placeholder="Password">
+      </div>
+      <div class="card-title" align="center">
+        <label>Telephone :</label>
+        <input type="text" class="form-control" name="Telephone" placeholder="Telephone number">
+      </div>
+      <div class="card-title" align="center">
+        <label>Email :</label>
+        <input type="text" class="form-control" name="Email" placeholder="Email">
+      </div>
+      <div class="card-title" align="center">
+        <label>Address :</label>
+        <input type="text" class="form-control" name="Address" placeholder="Address">
+      </div></br>
+      <div align="center" class="card-footer bg-transparent border-dark">
+        <button type="submit"class="btn btn-primary">註冊</button>
+        
+      </div>
+    </div>
+  </form>
+</body>
+
+</html>

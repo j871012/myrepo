@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <link rel="shortcut icon" href="/favicon.ico" >
+    <title><%= titlename %> - CYUT</title>
+    <script src="https://store.ims.ice.cyut.edu.tw/javascript/jquery-3.4.1.js"></script>
+    <script src="https://store.ims.ice.cyut.edu.tw/javascript/popper.min.js"></script>
+    <script src="https://store.ims.ice.cyut.edu.tw/javascript/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://store.ims.ice.cyut.edu.tw/css/bootstrap.min.css">
+    <link rel='stylesheet' href='/stylesheets/header.css' />
+    <link rel='stylesheet' href='/stylesheets/style.css'/>
+    <script src="https://store.ims.ice.cyut.edu.tw/javascript/dash.all.min.js"></script>
+    <script src="https://store.ims.ice.cyut.edu.tw/javascript/video.js"></script>
+    <script src="https://store.ims.ice.cyut.edu.tw/javascript/videojs-dash.min.js"></script>
+    <script src="https://store.ims.ice.cyut.edu.tw/javascript/bootstrap-filestyle.min.js"></script>
+    <link rel="stylesheet" href="https://store.ims.ice.cyut.edu.tw/css/video-js-cdn.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <link rel="icon" href="https://www.convertico.com/images/1606070688.4403/_previmg.png" type="image/x-icon" / >
+    
+    <style>
+      .head{
+        font-weight: bold;
+        font-size: 40px;
+      }
+      
+    </style>
+  
+    <div class="container-fluid">
+      <nav class="navbar navbar-expand-lg navbar-light bg-light row" style="max-height: 60px!important;">
+        <a class="navbar-brand head " href="/"> 直播平台 </a>
+       
+        <div class="col"></div>
+        <h1 class="navbar-brand head col-2" style="font-size: 40px; font-weight: bold; " ><p><%= title %></p></h1>
+        <div class="col"></div>
+        <div  class="my-2 my-lg-0 ">
+          <p style="font-size: 25px;">用戶名: <%= chatname %>
+          &nbsp;
+          <a id="car" class="btn btn-primary" href="/cart/cart/<%= titlename %>" target="_blank ">購物去</a>
+          &nbsp;
+        <script>
+            $("#car").click(function(){
+              $.ajax({
+                url: '../cart/cart/<%= titlename %>',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                  sellersroom: '<%= titlename %>'
+                },
+                success: function(data) {
+                  $("#car").attr("href", "../cart/cart/<%= titlename %>");
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                  alert(JSON.parse(XMLHttpRequest.responseText).msg);
+                }
+              })
+            })
+        </script>
+          <a class="btn btn-primary" href="javascript:history.go(-1);">返回</a>
+        </div>
+      </nav>
+    </div>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row" style="height: 87vh;">
+        <div id="CONTENTC" class="col-8">
+          <video autoplay id=video  class="video-js vjs-default-skin vjs-fill" controls > </video>
+
+
+        </div>
+
+        <div id="container" class="col-4"  style="padding: 0 0 !important;">
+          <div class="chats">
+            <div class="chat">
+              <div class="group">
+                <div class="name"></div>
+                <div class="msg"></div>
+              </div>
+           </div>
+          </div>
+          <div class="message" type=form>
+            <input id="msg" type="text" placeholder="傳送訊息"/>
+            <button type="submit">送出</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <script>
+        var socket = io.connect();
+  
+        socket.on('connect', () => {
+          socket.emit('join','<%= title %>'); 
+        });
+        socket.on('disconnect', () => {
+          socket.open();
+        });
+  
+        socket.on('roomMsg', (data) =>{
+          console.log(data);
+        });
+  
+        socket.on('message', (obj) => {
+          console.log(obj);
+          appendData([obj]);
+        });
+  
+        socket.on('history', (obj) => {
+          if (obj.length > 0) {
+            appendData(obj);
+          }
+        });
+  
+        function appendData(obj) {
+          let el = document.querySelector('.chats');
+          let html = el.innerHTML;
+          obj.forEach(element => {
+            html +=
+            `
+            <div class="chat">
+              <div class="group">
+                <div class="name">${element.name}：</div>
+                <div class="msg">${element.msg}</div>
+              </div>
+              </div>
+            `;
+          });
+          el.innerHTML = html.trim();
+          scrollWindow();       //下捲ㄉ
+        };
+        
+        document.querySelector('button').addEventListener('click', () => {
+          Send();
+        });
+  
+        function Send() {
+          let name = '<%= chatname %>';
+          let msg = document.querySelector('#msg').value;
+  
+          let msgdata = {
+            name: name,
+            msg: msg,
+            roomid: '<%= title %>'
+          };
+  
+          socket.emit('message', msgdata);
+          document.querySelector('#msg').value = '';
+        };
+        
+        function scrollWindow() {           //自動下捲
+          let h = document.querySelector('.chats');
+          h.scrollTo(0, h.scrollHeight);
+        };
+    </script>
+              <script>
+            
+                var player = videojs('video');
+                player.src('<%= rtmp %>');
+                player.load();
+                
+              </script>
+</body>
+</html>

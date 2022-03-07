@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+<head>
+    <title>下架商品</title>
+    <meta charset="utf-8">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="https://store.ims.ice.cyut.edu.tw/javascript/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://store.ims.ice.cyut.edu.tw/css/bootstrap.min.css">
+    <script src="http://www.xiaoshu168.com/js/public/jquery.min.js"></script>
+    <link rel="icon" href="https://www.convertico.com/images/1606071567.7556/_previmg.png" type="image/x-icon" / >
+</head>
+<style>
+    h1{
+        font-size: 50px;
+        font-weight: bold;
+    }
+    #user {
+        float: right ;
+        margin: auto;
+        width:auto;
+        height: 0px;
+        font-size: 30px;
+    } 
+    #shop {
+        float: left ;
+        margin: auto;
+        width:auto;
+        height:0px;    
+    }
+    #shop a button{
+        float: left ;
+        margin: auto;
+        width:auto;
+        height: 0px;
+        font-size: 30px;
+    }
+    h2{
+        height:30px;
+    }
+    body {
+            background-image:url('https://lh3.googleusercontent.com/-T-RKQeLK-T4/X7wUBTE8afI/AAAAAAAADf0/LFyOjhGX7JE-9x2-CML-b54CsK8OvfGogCLcBGAsYHQ/%25E5%259C%2596%25E7%2589%25871.png');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            background-size: 30%;               
+      }
+</style> 
+    <div id="user">
+        用戶名：<label for="num"><%= Roomname %></label>  
+        <input hidden type="text" name="dataname" value='<%= Roomname %>' disabled>
+    </div>
+    <div id="shop" align=center>
+        <a align=center><button type="button" class="btn btn-link" onclick="location.href='/com/shop'">商品列表</button></a>
+      </div>
+    <h1 align=center>下架商品</h1>
+    <h2></h2>
+<div align=center> 
+    <form method="post">
+       
+        <table class="table col-8">
+            <thead style="font-size: 20px; text-align: center;">
+                <tr>
+                    <th></th>
+                    <th scope="col">請選取</th>
+                    <th scope="col">商品名稱</th>
+                    <th scope="col">價錢</th>
+                    <th scope="col">商品圖片</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody style="font-size: 25px; text-align: center;">
+            <% for(var i = 0; i < result.length; i++) { %>
+                <tr>
+                    <th></th>
+                    <td style="vertical-align:middle;"><input type="radio" name="student" value=<%= result[i]._id%>></td>
+                    <td style="vertical-align:middle;"><%= result[i].productname %></td>
+                    <td style="vertical-align:middle;"><%= result[i].moneyId %></td>
+                    <td style="vertical-align:middle;"><img width=150 height=150 src= "<%= result[i].image %>"></td>
+                    <input hidden type="text" name="_id" value=<%= result[i]._id %>></th>
+                </tr>
+            <% } %>
+            </tbody>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th ><button float=right style="font-size: 30px;" type="submit" class="btn btn-primary ">刪除</button></th>
+        </table>
+       
+        
+    </br>
+    </form>
+</div>
+</html>
