@@ -1,86 +1,105 @@
 <?php
 
-$str = file_get_contents('https://cp.zgzcw.com/lottery/jcplayvsForJsp.action?lotteryId=26&issue=2022-03-08');
-$pattern1 = '/<td class="wh-1.*?">(.*?)<\/td>/is';
-preg_match_all($pattern1 , $str , $match1,PREG_PATTERN_ORDER);
-$first=$match1[1];
-foreach($first as $val){
-    preg_match_all('/<a.*?>(.*?)<\/a>/is',$val,$num);
-    $ff=$num[1];
-    foreach($ff as $aa){
-        preg_match_all('/<i>(.*?)<\/i>/is',$aa,$ss);
-        $x=$ss[1];
-        foreach($x as $y){
-            print_r($y);
+$str = file_get_contents('https://cp.zgzcw.com/lottery/jcplayvsForJsp.action?lotteryId=26&issue=2022-03-16');
+$pattern = '/<tr.*?>(.*?)<\/tr>/is';
+preg_match_all($pattern , $str, $match);
+$first=$match[1];
+$list = [];
+
+foreach($first as $pp){
+    $id = NULL;
+    $con = NULL;
+    $team_a = NULL;
+    $team_b = NULL;
+    $lose = NULL;
+    $win = NULL;
+    
+    $pattern1 = '/<td class="wh-1.*?">(.*?)<\/td>/is';
+    preg_match_all($pattern1 , $pp , $match1);
+    $first=$match1[1];
+    foreach($first as $val){
+        preg_match_all('/<a.*?>(.*?)<\/a>/is',$val,$num);
+        $ff=$num[1];
+        foreach($ff as $aa){
+            preg_match_all('/<i>(.*?)<\/i>/is',$aa,$ss);
+            $id_1=$ss[1];  
+            $id = $id_1[0];  
         }
-        
+    }   
 
-        
+    $pattern2 = '/<td class="wh-2">(.*?)<\/td>/is';
+    preg_match_all($pattern2 , $pp , $match2);
+    $first=$match2[0];
+    foreach($first as $val){
+        preg_match_all('/<span .*?>(.*?)<\/span>/is',$val,$num);
+        $con_1=$num[1];
+        $con = $con_1[0];
     }
-    echo '<br>';
-}
-//print_r($match1);
-echo '<br>';
 
-$pattern2 = '/<td class="wh-2">(.*?)<\/td>/is';
-preg_match_all($pattern2 , $str , $match2);
-$first=$match2[0];
-//print_r($first);
-foreach($first as $val){
-    preg_match_all('/<span .*?>(.*?)<\/span>/is',$val,$num);
-    $ff=$num[1];
-    foreach($ff as $aa){
-        print_r($aa);
-        echo '<br>';
+    $pattern4 = '/<td class="wh-4 .*?">(.*?)<\/td>/is';
+    preg_match_all($pattern4 , $pp,$match4);
+    $first=$match4[1];
+    foreach($first as $val){
+        preg_match_all('/<a.*?>(.*?)<\/a>/is',$val,$num);
+        $team_a_1=$num[1];
+        $team_a = $team_a_1[0];
     }
-    
-}
 
-
-
-
-$pattern4 = '/<td class="wh-4 .*?">(.*?)<\/td>/is';
-preg_match_all($pattern4 , $str,$match4);
-$first=$match4[1];
-//print_r($first);
-foreach($first as $val){
-    preg_match_all('/<a.*?>(.*?)<\/a>/is',$val,$num);
-    $ff=$num[1];
-    foreach($ff as $aa){
-        print_r($aa);
-        
+    $pattern6 = '/<td class="wh-6 .*?">.*?<\/td>/is';
+    preg_match_all($pattern6 , $pp,$match6);
+    $first=$match6[0];
+    foreach($first as $val){
+        preg_match_all('/<a.*?>(.*?)<\/a>/is',$val,$num);
+        $team_b_1=$num[1];
+        $team_b = $team_b_1[0];
     }
-    echo '<br>';
-}
 
-$pattern6 = '/<td class="wh-6 .*?">.*?<\/td>/is';
-preg_match_all($pattern6 , $str,$match6);
-$first=$match6[0];
-foreach($first as $val){
-    preg_match_all('/<a.*?>(.*?)<\/a>/is',$val,$num);
-    $ff=$num[1];
-    foreach($ff as $aa){
-        print_r($aa);
+    $pattern7 = '/<td class="wh-7 .*?">.*?<\/td>/is';
+    preg_match_all($pattern7 , $pp,$match7);
+    $first=$match7[0];
+    foreach($first as $val){
+        preg_match_all('/<a.*?>(.*?)<\/a>/is',$val,$num);
+        $ratio=$num[1];
+        $lose=$ratio[0];
+        $win=$ratio[1];
+             
     }
     
-    echo '<br>';
-}
-echo '<br>';
+    $test = array(
+        'id'     => $id,
+        'con'    => $con,
+        'team_a' => $team_a,
+        'team_b' => $team_b,
+        'lose'   => $lose,
+        'win'    => $win,
+    );
+    if($test ['id'] == NULL){
+        continue;
+    }else{
+        array_push($list, $test);
+    }    
 
-$pattern7 = '/<td class="wh-7 .*?">.*?<\/td>/is';
-preg_match_all($pattern7 , $str,$match7);
-$first=$match7[0];
-foreach($first as $val){
-    preg_match_all('/<a.*?>(.*?)<\/a>/is',$val,$num);
-    //print_r($num);
-    $ff=$num[1];
-    foreach($ff as $aa){
-        print_r($aa);
+}
+
+$result = count($list); 
+// var_dump($list);
+// insert
+
+include 'mysql.php';
+for($i = 0;$i < $result; $i++){
+    $sql = "INSERT INTO basketball (baskid, con, team_a, team_b, lose, win )VALUES";
+    for($j = 0;$j < $i; $j++){
+        $sql .= "
+        (" . $list[$j]['id'] . ",'" . ($list[$j]['con']) . "' ,'" . ($list[$j]['team_a']) . "','" . ($list[$j]['team_b']) . "', " . $list[$j]['lose'] . "," . $list[$j]['win'] . "),";     
     }
-    echo'<pre>';
-    echo '<br>';
+    $sql .= "
+    (" . $list[$i]['id'] . ",'" . ($list[$i]['con']) . "' ,'" . ($list[$i]['team_a']) . "','" . ($list[$i]['team_b']) . "', " . $list[$i]['lose'] . "," . $list[$i]['win'] . ")";
 }
 
+$conn->query($sql);
+// var_dump($sql);
+echo "ok";
 
 
 ?>
+
