@@ -21,8 +21,11 @@ tr:nth-child(even) {
 <table>
 <?php
 include 'mysql.php';
-$sql = "SELECT * FROM basketball";
+
+
+/*$sql = "SELECT * FROM basketball";
 $result = $conn->query($sql);
+
 if($result->num_rows > 0){
     while($row = $result->fetch_assoc()) {?>
     <tr>
@@ -59,9 +62,14 @@ if($result->num_rows > 0){
         </tr>
         <?php
     }
-}else{
+}else{?>
+    <tr>
+    <th><?php
     echo "no data";
-}
+    ?>
+    </th>
+    </tr><?php
+}*/
 ?>
 </table>
 </body>
