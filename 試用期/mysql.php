@@ -10,18 +10,34 @@ if($conn-> connect_error){
 function dbread($sql) {
     // 連線 query
     // 回傳 資料陣列
+    $num=[];
     global $conn;
     $result = $conn->query($sql);
-    return mysqli_fetch_array($result);
-   
+    while($row = mysqli_fetch_assoc($result)){
+        array_push($num, $row);
+    }
+    return $num;
 }
 
-global $result;
-$list = dbread('SELECT * FROM basketball');
-for($x = 0;$x < $result; $x++){
-    var_dump($list[$x]);
+function dbwrite($sql) {
+    // insertId
+    // affectRows: 10, 1,...
+    global $conn;
+    $conn->query($sql);
+    $lastid = $conn->insert_id;
+    $affect = mysqli_affected_rows($conn);
+    
+    return [
+        'lastid' => $lastid,
+        'affect' => $affect,
+    ];
+    // return $lastid." , ".$affect;
+    
 }
-var_dump($list);
+
+
+// $list = dbread('SELECT * FROM basketball');
+// var_dump($list);
 
 
 // [

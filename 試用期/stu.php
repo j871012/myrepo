@@ -1,76 +1,27 @@
-<!DOCTYPE html>
-<html>
-<style>
-table {
-  font-family: arial, sans-serif; 
-  border-collapse: collapse;
-  width: 100%;
-}
 
-td, th {
-  border: 1px solid #dddddd;
-  text-align:lerf ; 
-  padding: 8px;
-}
-
-tr:nth-child(even) {
-  background-color: #dddddd;
-}
-</style>
-<body>
-<table>
 <?php
 include 'mysql.php';
 
+$list = dbread('SELECT * FROM basketball');
+// var_dump($list);
+// echo '<br>';
+$result = dbwrite("UPDATE basketball SET  con = 'NB' ");
+// var_dump($result);
+// $result = dbwrite("INSERT INTO basketball(con, lose, win)VALUE('NB', '12', '23')");
+// var_dump($result);
 
-/*$sql = "SELECT * FROM basketball";
-$result = $conn->query($sql);
+echo json_encode($list, JSON_UNESCAPED_UNICODE);
 
-if($result->num_rows > 0){
-    while($row = $result->fetch_assoc()) {?>
-    <tr>
-        <td>
-        <?php    
-        echo " " . $row["baskid"]. "  ";
-        ?>
-        </td>
-        <td>
-        <?php    
-        echo " " . $row["con"]. " ";
-        ?>
-        </td>
-        <td>
-        <?php    
-        echo " " . $row["team_a"]. " ";
-        ?>
-        </td>
-        <td>
-        <?php    
-        echo " " . $row["team_b"]. " ";
-        ?>
-        </td>
-        <td>
-        <?php    
-        echo " " . $row["lose"]. " ";
-        ?>
-        </td>
-        <td>
-        <?php    
-        echo " " . $row["win"]. " ";
-        ?>
-        </td>
-        </tr>
-        <?php
-    }
-}else{?>
-    <tr>
-    <th><?php
-    echo "no data";
-    ?>
-    </th>
-    </tr><?php
-}*/
-?>
-</table>
-</body>
-</html>
+
+
+
+
+
+
+//
+
+// $result = [
+//   'insertId' => null,
+//   'affectRows' => 10,
+// ];
+
