@@ -32,7 +32,6 @@ function dbwrite($sql) {
         'affect' => $affect,
     ];
     // return $lastid." , ".$affect;
-    
 }
 
 
