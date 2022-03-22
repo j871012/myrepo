@@ -3,7 +3,7 @@
 include 'mysql.php';
 
 $list = dbread('SELECT * FROM basketball');
-// var_dump($list);
+var_dump($list);
 // echo '<br>';
 $result = dbwrite("UPDATE basketball SET  con = 'NB' ");
 // var_dump($result);

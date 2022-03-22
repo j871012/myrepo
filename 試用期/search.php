@@ -1,6 +1,7 @@
 <?php
 include 'mysql.php';
 
+
 $searchs = $_POST['search'];
 $searchs = trim($searchs);
 // if(!$searchs){
