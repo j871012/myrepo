@@ -1,30 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zw">
 
 <head>
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td,
+        th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
+
         $(document).ready(function (data) {
             // console.log('ready test');
+            $("button").click(function () {
+                var search = $("#search").val();
+                console.log(search);
+                if (search == '') {
+                    alert("無");
+                } else {
+                    $.ajax({
+                        type: "POST",
+                        url: "search.php",
+                        data: { search: search },
+                        datatype: "json",
+                        success: function (data) {
+                            // $("#msg").html(decodeURI(data));
+                            var contact = JSON.parse(data);
+                            console.log(contact);
+                            var trHTML = '';
+                            $.each(contact, function (index, value) {
+                                trHTML += '<tr><td>' + value.id +
+                                    '</td><td>' + value.con +
+                                    '</td><td>' + value.team_a +
+                                    '</td><td>' + value.team_b +
+                                    '</td><td>' + value.lose +
+                                    '</td><td>' + value.win + '</td></tr>';
+                            });
+                            $('#example').html(trHTML);
+                        },
+                        error: function (e) {
+                            alert("网络错误，请重试！！");
+                        },
+                    });
+                }
 
-            $('#example').DataTable({
-                "ajax": {
-                    type: "POST",
-                    url: "search.php",
-                    data: { search: "拜仁", },
-                    datatype: "json",
-                    success: function (data) {
-                        $("#msg").html(decodeURI(data));
-                        // console.log(data)
-                    },
-                    error: function (e) {
-                        alert("网络错误，请重试！！");
-                    }
-                },
-            })
+            });
         });
 
     </script>
@@ -34,11 +70,25 @@
 
 <body>
 
-    <form id="data" enctype="multipart/form-data">
+    <input id="search" type="text" name="search" />
+    <button type="button" onclick="">POST</button>
+    <table  >
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>basketid</th>
+                <th>team_a</th>
+                <th>team_b</th>
+                <th>lose</th>
+                <th>win</th>
+            </tr>
+        </thead>
+        <tbody id="example">
 
-        <input type="text" name="search" />
-        <input type="submit" value="search" />
-    </form>
+        </tbody>
+    </table>
+
+
 
 </body>
 
