@@ -82,7 +82,7 @@ foreach($first as $pp){
 }
 
 $result = count($list); 
-// var_dump($list);
+var_dump($list);
 // insert
 
 include 'mysql.php';
