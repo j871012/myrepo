@@ -3,7 +3,7 @@ include 'mysql.php';
 
 
 $searchs = $_POST['search'];
-$searchs = trim($searchs);
+// $searchs = trim($searchs);
 // if(!$searchs){
 //     echo "[]";
 //     exit;

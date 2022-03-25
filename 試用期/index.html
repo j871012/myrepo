@@ -3,64 +3,36 @@
 
 <head>
     <title>My first Vue app</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/vue@2"></script>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-</head>
-<script>
-    var example = new Vue({
-        el: '#example',
-        data: {
-            basklist: {
-                res: {}
-            },
-            baskball: [],
-        },
-        mounted: function () {
-            $("button").click(function () {
-                var search = $("#search").val();
-                if (search == '') {
-                    alert("無");
-                } else {
-                    $.ajax({
-                        type: "POST",
-                        url: "search.php",
-                        data: { search: search },
-                        datatype: "json",
-                        success: function (data) {
-                            // $("#msg").html(decodeURI(data));
-                            var contact = JSON.parse(data);
-                            var trHTML = '';
-                            $.each(contact, function (index, value) {
-                                trHTML += '<tr><td>' + value.id +
-                                    '</td><td>' + value.baskid +
-                                    '</td><td>' + value.con +
-                                    '</td><td>' + value.team_a +
-                                    '</td><td>' + value.team_b +
-                                    '</td><td>' + value.lose +
-                                    '</td><td>' + value.win + '</td></tr>';
-                            });
-                            $('#example').html(trHTML);
-                        },
-                        error: function (e) {
-                            alert("网络错误，请重试！！");
-                        },
-                    });
-                }
-
-            });
+    <style>
+        table {
+          font-family: arial, sans-serif;
+          border-collapse: collapse;
+          width: 100%;
         }
-    })
-</script>
+        
+        td, th {
+          border: 1px solid #dddddd;
+          text-align: left;
+          padding: 8px;
+        }
+        
+        tr:nth-child(even) {
+          background-color: #dddddd;
+        }
+        </style>
+</head>
 
 <body>
-    <div id="example">
-        <select>
-            <option v-for="value in basklist" v-bond:value="value">{{value}}</option>
-        </select>
-        <table border="1">
+    <div id="list">
+        <input id="search" v-model="message">
+        <button v-on:click="bind">POST</button>
+        <table >
             <thead>
                 <tr>
                     <th>id</th>
@@ -72,12 +44,54 @@
                     <th>win</th>
                 </tr>
             </thead>
-            <tbody v-for="value in baskball">
-
+            <tbody >
+                <tr v-for="item in baskball">
+                    <td>{{item.id}}</td>
+                    <td>{{item.baskid}}</td>
+                    <td>{{item.con}}</td>
+                    <td>{{item.team_a}}</td>
+                    <td>{{item.team_b}}</td>
+                    <td>{{item.lose}}</td>
+                    <td>{{item.win}}</td>
+                </tr>
+                
             </tbody>
         </table>
     </div>
-</body>
 
+</body>
+<script>
+
+    var list = new Vue({
+        el: '#list',
+        data: {
+            message: '',
+            baskball: ''
+        },
+        methods: {
+            bind: function () {
+                var self = this;
+                console.log(self.message);
+                // console.log('ssssss');
+                $.ajax({
+                    type: "POST",
+                    url: "search.php",
+                    data: { search: this.message },
+                    datatype: "json",
+                    success: function (data) {
+                        var contact = JSON.parse(data);
+                        self.baskball = contact;
+                        console.log(self.baskball);
+                    },
+                    error: function (e) {
+                        alert("网络错误，请重试！！");
+                    },
+
+                })
+            }
+
+        }
+    })
+</script>
 
 </html>
