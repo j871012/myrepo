@@ -1,6 +1,6 @@
 <?php
 
-$str = file_get_contents('https://cp.zgzcw.com/lottery/jcplayvsForJsp.action?lotteryId=26');
+$str = file_get_contents('https://cp.zgzcw.com/lottery/jcplayvsForJsp.action?lotteryId=26&issue=2022-03-27');
 $pattern = '/<tr.*?>(.*?)<\/tr>/is';
 preg_match_all($pattern , $str, $match);
 $first=$match[1];

@@ -11,28 +11,34 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <style>
         table {
-          font-family: arial, sans-serif;
-          border-collapse: collapse;
-          width: 100%;
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
         }
-        
-        td, th {
-          border: 1px solid #dddddd;
-          text-align: left;
-          padding: 8px;
+
+        td,
+        th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
         }
-        
+
         tr:nth-child(even) {
-          background-color: #dddddd;
+            background-color: #dddddd;
         }
-        </style>
+    </style>
 </head>
 
 <body>
-    <div id="list">
+    <div id="list" >
+        <select id="select" v-model="selected">
+            <option disabled value="">隊伍名</option>
+            <option>team_a</option>
+            <option>team_b</option>
+        </select>
         <input id="search" v-model="message">
         <button v-on:click="bind">POST</button>
-        <table >
+        <table>
             <thead>
                 <tr>
                     <th>id</th>
@@ -44,7 +50,7 @@
                     <th>win</th>
                 </tr>
             </thead>
-            <tbody >
+            <tbody>
                 <tr v-for="item in baskball">
                     <td>{{item.id}}</td>
                     <td>{{item.baskid}}</td>
@@ -54,17 +60,17 @@
                     <td>{{item.lose}}</td>
                     <td>{{item.win}}</td>
                 </tr>
-                
+
             </tbody>
         </table>
     </div>
 
 </body>
 <script>
-
     var list = new Vue({
         el: '#list',
         data: {
+            selected: '',
             message: '',
             baskball: ''
         },
@@ -72,11 +78,14 @@
             bind: function () {
                 var self = this;
                 console.log(self.message);
-                // console.log('ssssss');
+                console.log(self.selected);
                 $.ajax({
                     type: "POST",
                     url: "search.php",
-                    data: { search: this.message },
+                    data: {
+                        search: this.message,
+                        select: this.selected
+                    },
                     datatype: "json",
                     success: function (data) {
                         var contact = JSON.parse(data);
@@ -88,6 +97,7 @@
                     },
 
                 })
+
             }
 
         }
