@@ -58,12 +58,8 @@
                     <td>{{item.con}}</td>
                     <td>{{item.team_a}}</td>
                     <td>{{item.team_b}}</td>
-                    <!-- <td v-if="item.lose<2" :style="{color:red}">{{item.lose}}</td>
-                    <td v-else :style="{color:blue}">{{item.lose}}</td>
-                    <td v-if="item.win<2" :style="{color:red}">{{item.win}}</td>
-                    <td v-else :style="{color:blue}">{{item.win}}</td> -->
-                    <td class="lose" :style="{color:lose}">{{item.lose}}</td>
-                    <!-- <td class="win" :style="{color:win}">{{item.win}}</td> -->
+                    <td :style="winloseClass(item.lose)">{{item.lose}}</td>
+                    <td :style="winloseClass(item.win)">{{item.win}}</td>
                 </tr>
 
             </tbody>
@@ -85,9 +81,9 @@
         computed: {
             lose: function () {
                 return {
-                    act: this.baskball.lose < 2 ,
-                    style : this.blue
-                    
+                    act: this.baskball.lose < 2,
+                    style: this.blue
+
                 }
 
             },
@@ -125,6 +121,13 @@
 
                 })
 
+            },
+            winloseClass: function (ratio) {
+                if (ratio >= 2) {
+                    return 'color: blue'
+                } else {
+                    return 'color: red'
+                }
             }
 
         }
