@@ -1,2 +1,2 @@
 <?
-echo 'test source';
+echo 'hello';
